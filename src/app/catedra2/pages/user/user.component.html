@@ -1,11 +1,9 @@
-<button (click)="navigateToCreateUser()" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600 mb-4">Crear Usuario</button>
+<button (click)="toggleCreateUserForm()" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600 mb-4">Crear Usuario</button>
 <br>
 <button (click)="toggleUserList()" class="bg-green-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-green-600 mb-4">Mostrar/Ocultar Lista de Usuarios</button>
-<div *ngIf="showUserList" class="user-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-  <div *ngFor="let user of users" class="user-item bg-white p-6 rounded-lg shadow-md">
-    <h3 class="text-lg font-bold text-gray-900">{{ user.nombre }}</h3>
-    <p class="text-gray-700">Email: {{ user.correo }}</p>
-    <p class="text-gray-700">Date of Birth: {{ user.fechaNacimiento | date:'yyyy-MM-dd' }}</p>
-    <p class="text-gray-700">Gender: {{ user.genero }}</p>
-  </div>
+<div *ngIf="showCreateUserForm">
+  <app-create-user-page (userCreated)="onUserCreated($event)"></app-create-user-page>
+</div>
+<div *ngIf="showUserList">
+  <app-user-list-page></app-user-list-page>
 </div>

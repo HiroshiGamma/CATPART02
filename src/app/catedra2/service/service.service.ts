@@ -1,8 +1,4 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams,
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { firstValueFrom, Observable } from 'rxjs';
 import { ResponseAPIUser } from '../interface/responseApiUser';
@@ -11,14 +7,16 @@ import { ResponseAPIUser } from '../interface/responseApiUser';
   providedIn: 'root',
 })
 export class ServiceService {
-  private apiUrl: string = 'http://localhost:5091';
+  private apiUrl: string = 'http://localhost:5091/api/User';
+  private apiUrlAllUsers: string = 'http://localhost:5091/api/User/all';
   public errors: string[] = [];
   private http = inject(HttpClient);
 
-  async postData(data: any): Promise<any> {
+  async postData(user: any): Promise<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     try {
       const response = await firstValueFrom(
-        this.http.post<any>(`${this.apiUrl}/api/User`, data)
+        this.http.post<any>(this.apiUrl, JSON.stringify(user), { headers })
       );
       return Promise.resolve(response);
     } catch (error) {
@@ -35,7 +33,7 @@ export class ServiceService {
   async getAllUsers(): Promise<ResponseAPIUser[]> {
     try {
       const response = await firstValueFrom(
-        this.http.get<ResponseAPIUser[]>(`${this.apiUrl}/api/User/all`)
+        this.http.get<ResponseAPIUser[]>(this.apiUrlAllUsers)
       );
       return Promise.resolve(response);
     } catch (error) {

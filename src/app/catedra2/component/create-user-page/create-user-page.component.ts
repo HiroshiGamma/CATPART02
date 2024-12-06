@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ServiceService } from '../../service/service.service';
 import { CommonModule } from '@angular/common';
@@ -7,21 +7,22 @@ import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-user-page',
-    standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './create-user-page.component.html',
   styleUrls: []
 })
 export class CreateUserPageComponent {
+  @Output() userCreated = new EventEmitter<any>();
   userForm: FormGroup;
   formErrors: { [key: string]: string } = {};
 
   constructor(private fb: FormBuilder, private serviceService: ServiceService) {
     this.userForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-      email: ['', [Validators.required, Validators.email]],
-      dateOfBirth: ['', [Validators.required, this.dateValidator]],
-      gender: ['', Validators.required]
+      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      correo: ['', [Validators.required, Validators.email]],
+      fechaNacimiento: ['', [Validators.required, this.dateValidator]],
+      genero: ['', Validators.required]
     });
 
     this.userForm.valueChanges.subscribe(() => this.onValueChanged());
@@ -57,30 +58,33 @@ export class CreateUserPageComponent {
   }
 
   validationMessages: { [key: string]: { [key: string]: string } } = {
-    name: {
+    nombre: {
       required: 'Name is required.',
       minlength: 'Name must be at least 3 characters long.',
       maxlength: 'Name cannot be more than 20 characters long.'
     },
-    email: {
+    correo: {
       required: 'Email is required.',
       email: 'Invalid email format.'
     },
-    dateOfBirth: {
+    fechaNacimiento: {
       required: 'Date of Birth is required.',
       invalidDate: 'Date of Birth must be in the past.'
     },
-    gender: {
+    genero: {
       required: 'Gender is required.'
     }
   };
 
   onSubmit(): void {
     if (this.userForm.valid) {
+      console.log('Form data:', this.userForm.value); // Log the form data
       this.serviceService.postData(this.userForm.value).then(
         (response) => {
           console.log('User created successfully', response);
           alert('User created successfully');
+          this.userCreated.emit(this.userForm.value);
+          this.userForm.reset();
         },
         (error) => {
           console.error('Error creating user', error);

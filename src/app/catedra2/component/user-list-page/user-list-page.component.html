@@ -1,8 +1,8 @@
 <div class="user-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-  <div *ngFor="let user of users" class="user-item bg-white p-4 rounded shadow">
-    <h3 class="text-lg font-bold">{{ user.nombre }}</h3>
-    <p>Email: {{ user.correo }}</p>
-    <p>Date of Birth: {{ user.fechaNacimiento | date:'yyyy-MM-dd' }}</p>
-    <p>Gender: {{ user.genero }}</p>
+  <div *ngFor="let user of users" class="user-item bg-white p-6 rounded-lg shadow-md">
+    <h3 class="text-lg font-bold text-gray-900">{{ user.nombre }}</h3>
+    <p class="text-gray-700">Email: {{ user.correo }}</p>
+    <p class="text-gray-700">Date of Birth: {{ user.fechaNacimiento | date:'yyyy-MM-dd' }}</p>
+    <p class="text-gray-700">Gender: {{ user.genero }}</p>
   </div>
 </div>
